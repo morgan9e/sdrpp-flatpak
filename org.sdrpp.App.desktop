@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=SDR++
+Comment=SDR receiver software
+Exec=sdrpp
+Icon=org.sdrpp.App
+Terminal=false
+Type=Application
+Categories=AudioVideo;HamRadio;
+

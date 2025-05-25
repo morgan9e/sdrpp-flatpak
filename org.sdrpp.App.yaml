@@ -1,0 +1,96 @@
+id: org.sdrpp.App
+runtime: org.kde.Platform
+runtime-version: '5.15-23.08'
+sdk: org.kde.Sdk
+command: sdrpp
+finish-args:
+  - --share=network
+  - --socket=pulseaudio
+  - --filesystem=home
+  - --device=usb
+  - --socket=x11
+  - --device=dri
+modules:
+  - name: fftw
+    buildsystem: autotools
+    config-opts:
+      - --enable-float
+      - --enable-shared
+    sources:
+      - type: archive
+        url: http://www.fftw.org/fftw-3.3.10.tar.gz
+        sha256: 56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467
+  - name: volk
+    buildsystem: cmake
+    sources:
+      - type: git
+        url: https://github.com/gnuradio/volk.git
+        commit: 07c1952cd642897af70b6f8bbfeee3a14f54f525
+  - name: glfw
+    buildsystem: cmake
+    sources:
+      - type: git
+        url: https://github.com/glfw/glfw.git
+        commit: 7482de6071d21db77a7236155da44c172a7f6c9e
+  - name: libusb
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://github.com/libusb/libusb/releases/download/v1.0.28/libusb-1.0.28.tar.bz2
+        sha256: 966bb0d231f94a474eaae2e67da5ec844d3527a1f386456394ff432580634b29
+  - name: rtl-sdr
+    buildsystem: cmake
+    config-opts:
+      - -DINSTALL_UDEV_RULES=OFF
+      - -DDETACH_KERNEL_DRIVER=ON
+    sources:
+      - type: git
+        url: https://github.com/rtlsdrblog/rtl-sdr-blog.git
+        branch: v1.3.6
+  - name: rtaudio
+    buildsystem: cmake
+    config-opts:
+      - -DRTAUDIO_API_PULSE=ON
+      - -DRTAUDIO_BUILD_STATIC_LIBS=OFF
+      - -DBUILD_SHARED_LIBS=ON
+    sources:
+      - type: git
+        url: https://github.com/thestk/rtaudio.git
+        branch: 5.2.0
+  - name: sdrpp
+    buildsystem: cmake
+    build-args: "--socket=x11"
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DUSE_SYSTEM_FFTW=ON
+      - -DUSE_SYSTEM_VOLK=ON
+      - -DUSE_SYSTEM_GLFW=ON
+      - -DOPT_BUILD_RTL_TCP_SOURCE=ON
+      - -DOPT_BUILD_RTL_SDR_SOURCE=OFF
+      - -DOPT_BUILD_AIRSPY_SOURCE=OFF
+      - -DOPT_BUILD_AIRSPYHF_SOURCE=OFF
+      - -DOPT_BUILD_HACKRF_SOURCE=OFF
+      - -DOPT_BUILD_SOAPY_SOURCE=OFF
+      - -DOPT_BUILD_PLUTOSDR_SOURCE=OFF
+    build-options:
+      append-ldflags:
+        - -lX11
+      append-cxxflags:
+        - -I/usr/include  
+    sources:
+    - type: git
+      url: https://github.com/AlexandreRouma/SDRPlusPlus.git
+      commit: dd9b8db6c933eb3ed51288522b746b64c79a7fcf
+      #branch: master
+    - type: patch
+      path: remove-stdc++fs.patch
+  - name: sdrpp-desktop
+    buildsystem: simple
+    build-commands:
+      - install -D org.sdrpp.App.desktop /app/share/applications/org.sdrpp.App.desktop
+      - install -D org.sdrpp.App.png /app/share/icons/hicolor/256x256/apps/org.sdrpp.App.png
+    sources:
+      - type: file
+        path: org.sdrpp.App.desktop
+      - type: file
+        path: org.sdrpp.App.png

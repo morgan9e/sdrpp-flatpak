@@ -1,0 +1,11 @@
+--- a/core/CMakeLists.txt
++++ b/core/CMakeLists.txt
+@@ -157,7 +157,7 @@ else()
+     endif (NOT USE_INTERNAL_LIBCORRECT)
+ 
+     if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+-        target_link_libraries(sdrpp_core PUBLIC stdc++fs)
++        target_link_libraries(sdrpp_core PUBLIC X11)
+     endif ()
+ 
+ endif ()
