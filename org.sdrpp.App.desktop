@@ -1,9 +1,9 @@
 [Desktop Entry]
 Name=SDR++
-Comment=SDR receiver software
+Comment=Cross-Platform SDR Software
 Exec=sdrpp
 Icon=org.sdrpp.App
 Terminal=false
 Type=Application
-Categories=AudioVideo;HamRadio;
-
+Categories=Audio;HamRadio;
+Keywords=sdr;radio;rtl-sdr;hackrf;airspy;
